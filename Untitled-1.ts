@@ -129,4 +129,45 @@ export default function LoginPage() {
     
     if (!tipoUsuario || !papel) {
       setErro("Por favor, selecione seu tipo de usuário.";
+      return;
+   }
+
+   try {
+     setEnviando(true);
+     const usuarioLogado = await entrar(
+      identificador,
+      senha,
+      papel,
+      exigir2fa ? codigo2fa : undefined,
+     );
+     router.push(destinoPorPapel(usuarioLogado?.papel));
+   }catch (erro: any) {
+    const mensagemErro = 
+      error?.response?.data?.message ||
+      "Credenciais invalidas ou perfil pendente de aprovacao.";
+ 
+     if (String(mensagemErro).toLowerCase().includes("codigo de verificacao")) {
+       setExigir2fa(true);
+     }
+
+     serErro(mensagemErro);
+     return;
+   } finally {
+     setEnviando(false);
+   }
+ }
+
+   function selecionarTipo(tipo: TipoUsuario) {
+     setTipoUsuario(tipo);
+     setErro("");
+     setMensagem("");
+     setIdentificador("");
+     setCodigo2fa("");
+     setExigir2fa(false);
+  }
+
+
+
+     
+
     
