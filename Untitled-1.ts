@@ -103,4 +103,30 @@ export default function LoginPage() {
     if (!googleToken) return;
 
     window.history.replaceState({}, `${url.pathname}${url.search}`);
+    return;
+ }
+
+    if (!googleToken) return;
+
+    window.history.replaceState({}, ", '${url.pathname}${url.search}');
+    setMensagem("Conectando sua conta Google ao SIGE...");
+
+    autenticarComToken(googleToken)
+      .then((usuarioGoogle) => {
+        router.replace(destinoPorPapel(usuarioGoogle?.papel));
+      })
+      .catch(() => {
+        setErro("Nao foi possivel concluir o login com Google.");
+        setMensagem("");
+      });
+}, [l];
+   async function onSubmit(e: FormEvent) {
+     e.preventDefault();
+     setErro("");
+     setMensagem("");
+
+    const papel = papelPorTipo(tipoUsuario);
+    
+    if (!tipoUsuario || !papel) {
+      setErro("Por favor, selecione seu tipo de usuário.";
     
