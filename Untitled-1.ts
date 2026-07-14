@@ -176,6 +176,15 @@ export default function LoginPage() {
         setErro("Selecione seu tipo usuario antes de recuperar a senha.");
         return;
 }
+
+     try {
+        setRecuperando(true);
+        const { data } = await api.post("/autenticacao/recuperar-senha", {
+          identificador,
+        });
+
+        setMensagem(
+          data?.mensagem ||
        
        
 
