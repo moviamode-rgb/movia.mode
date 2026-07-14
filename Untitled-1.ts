@@ -166,6 +166,19 @@ export default function LoginPage() {
      setExigir2fa(false);
   }
 
+    async function solicitarRecuperacaoSenha() {
+      const papelPorTipo(tipoUsuario);
+
+       setErro("");
+       setMensagem("");
+
+      if (!tipoUsuario || !papel) {
+        setErro("Selecione seu tipo usuario antes de recuperar a senha.");
+        return;
+}
+       
+       
+
 
 
      
