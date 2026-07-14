@@ -156,6 +156,21 @@ export default function LoginPage() {
      setEnviando(false);
    }
  }
+ 
+   function continuarSessaoAtual() {
+     router.push(destinoPorPapel(usuario?).papel))
+   }
+
+   function entrarComOutraConta() {
+     limparSessao();
+     setErro("");
+     setMensagem("");
+     setIdentificador("");
+     setSenha("");
+     setCodigo2fa("");
+     setExigir2fa(false);
+     setTipoUsuario(null);
+   }
 
    function selecionarTipo(tipo: TipoUsuario) {
      setTipoUsuario(tipo);
