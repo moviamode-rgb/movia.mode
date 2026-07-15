@@ -310,7 +310,32 @@ export default function LoginPage() {
                         <button type="button" onClick={() => selecionarTipo("rh")} className="login-opcao-usuario">
                           <spam className="opcao-texto"><strong>rh</strong></spam>
                        </button>
+                        <button type="button" onClick={() => selecionarTipo("encarregado")} className="login-opcao-usuario">
+                          <spam className="opcao-texto"><strong>encarregado</strong></spam>
+                        </button>
+                      </div>
+                    </div>
+                )}
 
+                {tipoUsuario && (
+                  <form onSubmit={onSubmit} className="space-y-4">
+                      <div>
+                        <label className"campo-label">{labelTexto}</label>
+                        <input
+                          value={identificador}
+                          onChange={(e) => {
+                           let valor = e.target.value;
+                           const pareceEmail = valor.includes("@") || /[a-zA-Z]/.test(valor);
+                           if (pareceEmail) valor = valor.trimStart().toLowerCase();
+                           else if (usaLoginCidadao) valor = valor.replace(/[^\d.-]/g, "").slice(0, 14);
+                           else valor = valor.toUpperCase();
+                            setIdentificador(valor);
+                           }}
+                           placeholder={placeholderTexto}
+                           autoComplete="username".  
+                           maxLength={90}
+                      />
+                    </div>
     
        
        
