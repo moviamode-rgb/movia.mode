@@ -182,7 +182,7 @@ export default function LoginPage() {
   }
 
     async function solicitarRecuperacaoSenha() {
-      const papelPorTipo(tipoUsuario);
+      const papel = papelPorTipo(tipoUsuario);
 
        setErro("");
        setMensagem("");
@@ -190,6 +190,11 @@ export default function LoginPage() {
       if (!tipoUsuario || !papel) {
         setErro("Selecione seu tipo usuario antes de recuperar a senha.");
         return;
+}
+
+     if (!identificador.trim()) {
+        setErro("Informe seu ${labelTexto.toLowerCase()} para recuperar a senha.');
+        return; 
 }
 
      try {
