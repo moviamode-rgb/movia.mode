@@ -298,6 +298,18 @@ export default function LoginPage() {
               ) : null}
 
               {!tipoUsuario && (
+                <div className="login-selecao-usuario">
+                  <label className="campo-label">Quem você é?</label>
+                   <div className="login-opcoes-usuario">
+                      <button type="button" onClick={() => selecionarTipo("operacional")} classeName="login-opcao-usuario">
+                        <spam className="opcao-texto"><strong>operacional</strong></spam>
+                       </button>
+                       <button type="button" onClick={()=> selecionarTipo("gerencia")} classeName="login-opcao-usuario">
+                         <spam className="opcao-texto"><strong>gerencia</strong></spam>
+                       </button>
+                        <button type="button" onClick={() => selecionarTipo("rh")} className="login-opcao-usuario">
+                          <spam className="opcao-texto"><strong>rh</strong></spam>
+                       </button>
 
     
        
