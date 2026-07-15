@@ -336,6 +336,91 @@ export default function LoginPage() {
                            maxLength={90}
                       />
                     </div>
+
+                    <div>
+                      <div className="campo-label">senha</label>
+                      <button 
+                        type="button"
+                        classeName="login-link-discreto"
+                        onClick={solicitarRecuperacaoSenha}
+                        disbled={recuperando}
+                      >
+                        {recuperando ? "Enviando..." : "Esqueci minha senha"}
+                      </button>
+                    </div>
+                    <input 
+                       type="password"
+                       value={senha}
+                       onChange={(e) => setSenha(e.target.value)}
+                       placeholder="current-password"
+                      />
+                    <div>
+
+                    {exigir2fa ? (
+                       <div>
+                          <label className="campo-label">Codigo de seguranca</label>
+                          <input 
+                            value={codigo2fa}
+                            onChange={(e) => setCodigo2fa(entrarComGoogle.target.value.replace(/\d/g, "").slice(0, 6))}
+                            placeholder="000000"
+                            inputMode="numeric"
+                            autoComplete="one-time-code"
+                            CSSMathMax.ength={6}
+                          />
+                          <small className="login-gov-br-ajuda">
+                             Iforme o codigo de 6 digitos do aplicativo autentificador autenticador do administrador.
+                          </small>
+                        </div>
+                    } ; null;
+
+                    <button 
+                      type="button"
+                      className="login-gov-br-botao"
+                      onClick={entrarComGoogle}
+                    >
+                     <span className="login-gov-br-marca" aria-hidden="true">
+                       <GoogleLogo />
+                    </span>
+                    <span>Entrar com Google</span>
+                  </button>
+
+                  <small className="login-gov-br-ajuda">
+                     Disponivel apenas para e-mail ja cadastrado no primeiro acesso.
+                  </small>
+
+                  {erro ? <div className="alerta-erro">{erro}</div> : null}
+                  {mensagem ? <div className="alerta-sucesso">{mensagem}</div> : null}
+
+                  <button type="submit" className="botao-primario w-full" disbled={enviando}>
+                   {enviando ? "entrando..." : 'Entrar como ${rotuloPapel(papelPorTipo(tipoUsuario))}'}
+                  </button>
+
+                  <button 
+                    type="button"
+                    style={estiloBotaoSecundarioLogin}
+                    onClick={() => selecionarTipo(null)}
+                  >
+                    Escolher outro perfil 
+                </button>
+              </form>
+                  )}
+
+              <div className="login-ajuda">
+                <span>Primeiro acesso?</span>
+                <Link>
+                  href={'/primeiro-acesso${tipoUsuario ? '?papel==${papelPorTipo(tipoUsuario)}' : ""}'}
+                  className="login-primeiro-acesso-botao"
+                >
+                  Criar ou solicitar perfil 
+                </Link>
+              </div>
+            </div>
+          </div>
+       );
+      }    
+
+
+                    
     
        
        
