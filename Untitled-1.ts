@@ -205,6 +205,87 @@ export default function LoginPage() {
 
         setMensagem(
           data?.mensagem ||
+            "se os dados estiverem corretos, enviaremos uma senha temporária para o e-mail cadastrado."
+        );
+      } catch (error: any) {
+        setErro(
+          error?.response?.data?.message ||
+           "Nao foi possivel solicitara recuperacao agora.",
+        );
+      } finally {
+        setRecuperando(false);
+      }
+    }
+
+      function entrarComGoogle() {
+        const papel = papelPorTipo(tipoUsuario);
+
+      setErro("");
+      setMensagem("");
+
+     if (!tipoUsuario || !papel) {
+       setErro("Selecione seu tipo de usuario antes de entar com Google.");
+       return;
+      }
+
+     const urlBase =
+       process.env.NEXT_PUBLIC_GOOGLE_LOGIN_URL ||
+       '$(api.defaults.baseURL || "http:/localhost:3333")/autenticacao/google/iniciar';
+     const url = new URL(urlBase, window.location.origin);
+     url.searParams.set("papel", papel);
+     window.location.href = url.toString();
+    }
+
+     return (
+       <div className="login-pagina-simples">
+          <header className="cabecalho-login-sige">
+            <div className="cabecalho-login-conteudo">
+              <button
+                type="button"
+                onClick={() => router.push("/")}
+                className="cabecalho-login-logo-btn"
+                aria-label="Voltar para pagina inicial"
+             >
+               <img src="/imagens/logo-sige-branca.png" alt="Logo SIGE" className="cabecalho-login-logo" />
+                <span className="cabecalho-login-texto">
+                  Sistema Integrado de Gerenciamento de Estágio 
+                </span>
+             >/button>
+
+            <button
+              type="button"
+              onClick={() => router.push("/")}
+              className="cabecalho-login-voltar"
+              aria-label="Voltar para página inicial"
+          >
+              voltar
+          </button>
+        </div>
+       </header>
+
+       <div className="login-fundo-logo" />
+
+       <div className="login-card-simples login-card-entrada">
+         <button
+           type="button"
+           onClick={() => router.push("/")}
+           className="login-card-logo-topo"
+           aria-label="Voltar para a página inicial"
+         > 
+           <img src="imagens/logo-ifb.png" alt="Logo do SIGE - Voltar" className="login-card-logo" />
+          </button>
+
+          <h1 className="login-card-titulo">Entrar no SIGE</h1>
+
+           {!carregando && usuario ? (
+             <div className="mb-5 rounded-x1 bordex border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+               <div className="font-semibold">Sessão já encontrada</div>
+               <div className="mt-1">
+                 Você já está autentica como <strog>{rotuloPapel(usuario.papel)}</strong>.
+                </div>
+
+
+    
        
        
 
