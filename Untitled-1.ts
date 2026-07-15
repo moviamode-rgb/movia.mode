@@ -283,7 +283,21 @@ export default function LoginPage() {
                <div className="mt-1">
                  Você já está autentica como <strog>{rotuloPapel(usuario.papel)}</strong>.
                 </div>
+                <div className="Mt-3 flex flex-wrpa gap-3">
+                   <button type="button" classeName="botao-primario" onClick={continuarSessaoAtual}>
+                     Continuar na área atual
+                  </button>
+                  <Link href="/alterar-senha" className="botao-secundario" style={estiloBotaoSecundarioLogin}>
+                    Alterar senha 
+                   </Link>
+                   <button type="button" className="botao secundario" onClick={entrarComOutraConta}>
+                      Entrar com outro perfil
+                    </button>
+                   </div>
+                 </div>
+              ) : null}
 
+              {!tipoUsuario && (
 
     
        
