@@ -609,10 +609,10 @@ export class AutenticacaoServico {
         emailInstitucional: email,
       },
       include: {
-        estudante: true,
-        orientador: true,
-        coordenador: true,
-        supervisor: true,
+        operacional: true,
+        encarregado: true,
+        rh: true,
+        gerencia: true,
       },
       orderBy: {
         criadoEm: 'asc',
@@ -640,10 +640,10 @@ export class AutenticacaoServico {
     const usuario = await this.prisma.usuario.findUnique({
       where: { id: usuarioId },
       include: {
-        estudante: true,
-        orientador: true,
-        coordenador: true,
-        supervisor: true,
+        operacional: true,
+        encarregado: true,
+        rh: true,
+        gerencia: true,
       },
     });
 
@@ -822,7 +822,7 @@ export class AutenticacaoServico {
         <p>Sua senha temporaria e:</p>
         <p style="font-size:18px;font-weight:700;letter-spacing:1px">${this.escaparHtml(senhaTemporaria)}</p>
         <p>Acesse <a href="${urlLogin}">${urlLogin}</a>, entre com a senha temporaria e altere sua senha em seguida.</p>
-        <p>Se voce nao solicitou essa recuperacao, avise a coordenacao.</p>
+        <p>Se voce nao solicitou essa recuperacao, avise a rh.</p>
       `,
       codigoModelo: 'RECUPERACAO_SENHA',
       cargaModeloJson: {
@@ -901,19 +901,19 @@ export class AutenticacaoServico {
   }
 
   private tipoDestinatarioPorPapel(papel: PapelUsuario): TipoDestinatarioEmail {
-    if (papel === PapelUsuario.ESTUDANTE) return TipoDestinatarioEmail.ESTUDANTE;
-    if (papel === PapelUsuario.ORIENTADOR) return TipoDestinatarioEmail.ORIENTADOR;
-    if (papel === PapelUsuario.SUPERVISOR) return TipoDestinatarioEmail.SUPERVISOR;
-    if (papel === PapelUsuario.COORDENACAO) return TipoDestinatarioEmail.COORDENACAO;
-    return TipoDestinatarioEmail.COORDENACAO;
+    if (papel === PapelUsuario.OPERACIONAL) return TipoDestinatarioEmail.OPERACIONAL;
+    if (papel === PapelUsuario.ENCARREGADO) return TipoDestinatarioEmail.ENCARREGADO;
+    if (papel === PapelUsuario.RH) return TipoDestinatarioEmail.RH;
+    if (papel === PapelUsuario.GERENCIA) return TipoDestinatarioEmail.GERENCIA;
+    return TipoDestinatarioEmail.GERENCIA;
   }
 
   private nomePapel(papel: PapelUsuario) {
     const nomes: Record<string, string> = {
-      ESTUDANTE: 'Estudante',
-      ORIENTADOR: 'Orientador',
-      SUPERVISOR: 'Supervisor',
-      COORDENACAO: 'Coordenação',
+      OPERACIONAL: 'Operacional',
+      ENCARREGADO: 'Encarregado',
+      RH: 'Rh',
+      GERENCIA: 'Gerencia',
       ADMIN: 'Administrador',
     };
 
@@ -930,15 +930,15 @@ export class AutenticacaoServico {
     }
   }
 
-  private async enviarEmailBoasVindasEstudante(params: {
+  private async enviarEmailBoasVindasOperacional(params: {
     email: string;
     nome: string;
   }) {
-    const nome = this.escaparHtml(params.nome || 'estudante');
+    const nome = this.escaparHtml(params.nome || 'operacional');
     const urlLogin = this.urlFrontend('/login');
 
     await this.enviarEmailSeguro({
-      tipoDestinatario: TipoDestinatarioEmail.ESTUDANTE,
+      tipoDestinatario: TipoDestinatarioEmail.OPERACIONAL,
       emailDestinatario: params.email,
       assunto: 'SIGE IFB - cadastro criado com sucesso',
       texto:
@@ -949,7 +949,7 @@ export class AutenticacaoServico {
         <p>Você já pode acessar o sistema usando seu CPF/e-mail e a senha cadastrada.</p>
         <p><a href="${urlLogin}">Acessar o SIGE IFB</a></p>
       `,
-      codigoModelo: 'PRIMEIRO_ACESSO_ESTUDANTE_CRIADO',
+      codigoModelo: 'PRIMEIRO_ACESSO_OPERACIONAL_CRIADO',
       cargaModeloJson: {
         nome: params.nome,
         urlLogin,
@@ -1001,7 +1001,7 @@ export class AutenticacaoServico {
       if (!admin.emailInstitucional) continue;
 
       await this.enviarEmailSeguro({
-        tipoDestinatario: TipoDestinatarioEmail.COORDENACAO,
+        tipoDestinatario: TipoDestinatarioEmail.RH,
         emailDestinatario: admin.emailInstitucional,
         assunto: 'SIGE IFB - nova solicitação de acesso',
         texto:
@@ -1028,9 +1028,9 @@ export class AutenticacaoServico {
   }
 
 
-  async primeiroAcessoEstudante(dto: PrimeiroAcessoEstudanteDto) {
+  async primeiroAcessoOperacional(dto: PrimeiroAcessoOperacionalDto) {
     return this.primeiroAcesso({
-      papel: PapelUsuario.ESTUDANTE,
+      papel: PapelUsuario.OPERACIONAL,
       cpf: this.somenteNumeros(dto.cpf),
       nomeCompleto: dto.nomeCompleto,
       email: dto.emailInstitucional,
@@ -1079,10 +1079,10 @@ export class AutenticacaoServico {
         ativo: true,
       },
       include: {
-        estudante: true,
-        orientador: true,
-        coordenador: true,
-        supervisor: true,
+        operacional: true,
+        encarregado: true,
+        rh: true,
+        gerencia: true,
       },
     });
 
@@ -1122,11 +1122,11 @@ export class AutenticacaoServico {
     }
 
     const usaMatriculaServidor =
-      papel === PapelUsuario.ORIENTADOR || papel === PapelUsuario.COORDENACAO;
+      papel === PapelUsuario.ENCARREGADO || papel === PapelUsuario.RH;
 
     if (usaMatriculaServidor && !matriculaServidor) {
       throw new BadRequestException(
-        'Matrícula de servidor é obrigatória para orientador e coordenação.',
+        'Matrícula de servidor é obrigatória para encarregado e rh.',
       );
     }
 
@@ -1196,7 +1196,7 @@ export class AutenticacaoServico {
     }
 
     const senhaHash = await bcrypt.hash(dto.senha, 10);
-    const ativoInicialmente = papel === PapelUsuario.ESTUDANTE;
+    const ativoInicialmente = papel === PapelUsuario.OPERACIONAL;
 
     const tipoLogin = usaMatriculaServidor
       ? TipoLogin.MATRICULA_SERVIDOR
@@ -1212,8 +1212,8 @@ export class AutenticacaoServico {
         senhaHash,
         nomeExibicao: dto.nomeCompleto,
         ativo: ativoInicialmente,
-        estudante:
-          papel === PapelUsuario.ESTUDANTE
+        operacional:
+          papel === PapelUsuario.OPERACIONAL
             ? {
                 create: {
                   dadosPessoais: {
@@ -1232,14 +1232,14 @@ export class AutenticacaoServico {
             : undefined,
       },
       include: {
-        estudante: true,
-        orientador: true,
-        coordenador: true,
-        supervisor: true,
+        operacional: true,
+        encarregado: true,
+        rh: true,
+        gerencia: true,
       },
     });
 
-    if (papel !== PapelUsuario.ESTUDANTE) {
+    if (papel !== PapelUsuario.OPERACIONAL) {
       await this.prisma.requisicaoAprovacaoUsuario.create({
         data: {
           usuarioId: usuario.id,
@@ -1285,7 +1285,7 @@ export class AutenticacaoServico {
       };
     }
 
-    await this.enviarEmailBoasVindasEstudante({
+    await this.enviarEmailBoasVindasOperacional({
       email,
       nome: dto.nomeCompleto,
     });
