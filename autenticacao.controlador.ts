@@ -4,7 +4,7 @@ import { AutenticacaoServico } from './autenticacao.servico';
 import { EntrarDto } from './dto/entrar.dto';
 import { JwtGuard } from '../../comum/guardas/jwt.guard';
 import { UsuarioLogado } from '../../comum/decoradores/usuario-logado.decorator';
-import { PrimeiroAcessoEstudanteDto } from './dto/primeiro-acesso-estudante.dto';
+import { PrimeiroAcessoOperacionalDto } from './dto/primeiro-acesso-operacional.dto';
 import { PrimeiroAcessoDto } from './dto/primeiro-acesso.dto';
 import { BootstrapAdminDto } from './dto/bootstrap-admin.dto';
 import { RecuperarSenhaDto } from './dto/recuperar-senha.dto';
@@ -19,9 +19,9 @@ export class AutenticacaoControlador {
     return this.servico.entrar(dto, this.obterIp(req));
   }
 
-  @Post('primeiro-acesso-estudante')
-  primeiroAcessoEstudante(@Body() dto: PrimeiroAcessoEstudanteDto) {
-    return this.servico.primeiroAcessoEstudante(dto);
+  @Post('primeiro-acesso-operacional')
+  primeiroAcessoOperacional(@Body() dto: PrimeiroAcessoOperacionalDto) {
+    return this.servico.primeiroAcessoOperacional(dto);
   }
 
   @Post('primeiro-acesso')
